@@ -7,17 +7,17 @@
 Entry for the make.fun bounty **gta6-clipper-01**: "Clip GTA 6 for the most YouTube views."
 Places go by the video's YouTube views, the most first; the top 20 share $500.
 
-**v2 (recommended upload) is `clip-v2.mp4`: 14.36 seconds, vertical 1080×1920,
+**v3 (recommended upload) is `clip-v3.mp4`: 13.72 seconds, vertical 1080×1920,
 cut from Rockstar's official GTA VI Trailer 2 (4K, fetched straight from
 Rockstar's CDN with ffmpeg HTTP range-seek — no 1.36 GB download).** Three
-beats, one story, then a short pitch:
+beats, one story, then the pitch spoken over moving footage — no dead card:
 
 | Time | Footage | What happens |
 |---|---|---|
 | 0:00–0:02.8 | Trailer 2, 1:57.9–1:59.3 at 0.5× slow motion | The hook, frame one: Lucia's bus explosion, a police car flipping in flames. Caption: **SHE BLEW UP THE COPS** |
 | 0:02.8–0:05.3 | Trailer 2, 1:59.5–2:00.8 at 0.5× slow motion | Lucia and Jason climb onto a cargo plane mid-flight, city far below. Caption: **THEY STOLE A PLANE** |
 | 0:05.3–0:11.3 | Trailer 2, 1:02–1:08 | Lucia walks out of prison; Jason waits by the car. Caption: **SHE IS OUT. HE WAITED.** |
-| 0:11.3–0:14.4 | Pitch card (3 s) | **Make clips like this with AI / and earn money on make.fun / make.fun/bounty/gta6-clipper-01** |
+| 0:11.3–0:13.7 | Pitch over moving footage (2.4 s) | **Make clips like this with AI / and earn money on make.fun / make.fun/bounty/gta6-clipper-01** — same three lines, now over a slow-mo shot of the woman dancing in the car sunroof (Trailer 2, 1:51.4–1:52.6 at 0.5×), dark translucent band behind the text. No black screen. |
 
 ## Why v2 beats v1 — and the top entries
 
@@ -41,6 +41,25 @@ with a 7-second dead pitch card. v2 fixes that:
 - **Story, not clips.** Explosion → plane heist → "he waited for her":
   chaos, escalation, heart. One couple, one arc, 14 seconds.
 
+## v3 — the pitch is no longer a black card (fadli: "aneh", 20 Nov 12:28 WIB)
+
+v2's last 3 seconds were a static black screen with white text — on a phone it
+looked dead/empty. v3 keeps the first 11.3 seconds byte-identical and replaces
+only the pitch: the same three lines now sit on a **moving** shot — the woman
+dancing in the car sunroof, sunny Vice City behind her (Trailer 2, 1:51.4–
+1:52.6 at 0.5× slow motion, crop x=1900), with a translucent dark band
+(black@0.55, y=750–1090) behind the text so it stays readable. Pitch is now
+2.4 s, total 13.72 s.
+
+Why this shot and not the next ones in the trailer: the reunion ends at 1:48
+and the trailer cuts to a dark interrogation room, a night drive-by, then a
+club close-up (dark, abstract, no faces) and a tight cage kick — all checked
+frame by frame and rejected. The sunroof shot is the only bright, face-visible,
+clearly moving shot in the 1:48–1:56 window. First render caught on close-up
+check: the last ~0.15 s flashed the club scene (the woman→club cut is at
+~1:52.6, not 1:52.7) — trimmed `-to` to 1:52.6 and re-verified frames at
+12.0/13.0/13.6 s: one continuous shot, text readable, URL unclipped, no black.
+
 Why this moment: the explosion is pure GTA chaos and pays off in the first
 second — a viewer deciding in 1–2 seconds whether to swipe stays for the fire.
 The reunion right after is the trailer's emotional anchor, and the pitch turns
@@ -49,7 +68,8 @@ throughout, so it reads with the sound off.
 
 ## Files
 
-- `clip-v2.mp4` — the rendered Short v2 (14.36 s, 1080×1920, 30 fps, H.264 + AAC, 9.1 MB, sha256 `b399725dc390b8a63fcbde6cf4f307c3523e70ccf1f253635c899af57957ca5c`).
+- `clip-v3.mp4` — the rendered Short v3 (13.72 s, 1080×1920, 30 fps, H.264 + AAC, 10.6 MB, sha256 `905100a771077fd405dc6f370b8d2472dfbbdae65878fd39626f3e6472690278`).
+- `clip-v2.mp4` — v2 (14.36 s), kept for comparison; do not upload both.
 - `clip.mp4` — v1 (15.04 s), kept for comparison; do not upload both.
 - `main.ts` — the program (Node 22, standard library only): copies `VIDEO.json` to
   `/output/VIDEO.json`. That is all it has to do; the video itself is the entry.
@@ -78,14 +98,20 @@ ffmpeg -ss 119.5 -to 120.8 -i "$URL" \
   -af "atempo=0.5" -r 30 -c:v libx264 -pix_fmt yuv420p -preset medium -crf 20 -c:a aac -b:a 128k -ar 48000 v2b.mp4
 # 3. Reunion, three shots (1:02-1:03.5 x=1600, 1:03.5-1:06 x=1050, 1:06-1:08 x=2070),
 #    same crop/scale/caption "SHE IS OUT. HE WAITED.", original audio — reused from v1
-# 4. Pitch card, 3 s black with three drawtext lines (white 60, white 60, gold 52)
-ffmpeg -f lavfi -i color=c=black:s=1080x1920:r=30:d=3 -f lavfi -i anullsrc=r=48000:cl=stereo \
-  -vf "drawtext=...:text='Make clips like this with AI':fontsize=60...,drawtext=...:text='and earn money on make.fun':fontsize=60...,drawtext=...:text='make.fun/bounty/gta6-clipper-01':fontsize=52:fontcolor=yellow..." \
-  -t 3 -c:v libx264 -pix_fmt yuv420p -preset medium -crf 20 -c:a aac -b:a 128k -ar 48000 v2d.mp4
-# 5. Concatenate (all segments h264 1080x1920 30fps + aac) and drop the tmcd
-#    timecode track the Rockstar source carries (-write_tmcd 0)
-ffmpeg -f concat -safe 0 -i concat-v2.txt -c copy clip-v2.mp4
-ffmpeg -i clip-v2.mp4 -map 0:v -map 0:a -c copy -write_tmcd 0 clip-v2-clean.mp4
+# 4. Pitch OVER MOVING FOOTAGE, v3 (replaces v2's 3 s black card):
+#    woman in the car sunroof, Trailer 2 1:51.4-1:52.6 (slice 3.4-4.6 of a
+#    108.0-118.0 local slice) at 0.5x -> 2.37 s, crop x=1900. Same three text
+#    lines (white 60, white 60, gold 52) over a translucent dark band
+#    (drawbox black@0.55, y=750 h=340) — NO black screen. NOTE: -to 4.7
+#    caught ~0.15 s of the next (club) scene; the woman->club cut is at
+#    ~1:52.6, so -to must be 4.6, not 4.7.
+ffmpeg -ss 3.4 -to 4.6 -i slice108-118.mp4 \
+  -vf "setpts=2*PTS,crop=972:1727:1900:216,scale=1080:1920,drawbox=x=0:y=750:w=1080:h=340:color=black@0.55:t=fill,drawtext=fontfile=DejaVuSans-Bold.ttf:text='Make clips like this with AI':fontsize=60:fontcolor=white:borderw=4:bordercolor=black:x=(w-text_w)/2:y=775,drawtext=fontfile=DejaVuSans-Bold.ttf:text='and earn money on make.fun':fontsize=60:fontcolor=white:borderw=4:bordercolor=black:x=(w-text_w)/2:y=860,drawtext=fontfile=DejaVuSans-Bold.ttf:text='make.fun/bounty/gta6-clipper-01':fontsize=52:fontcolor=yellow:borderw=4:bordercolor=black:x=(w-text_w)/2:y=950" \
+  -af "atempo=0.5" -r 30 -c:v libx264 -pix_fmt yuv420p -preset medium -crf 20 -c:a aac -b:a 128k -ar 48000 v3d.mp4
+# 5. Concatenate v3 (first 11.3 s identical to v2: v2a, v2b, seg2a/b/c + v3d)
+#    and drop the tmcd timecode track the Rockstar source carries (-write_tmcd 0)
+ffmpeg -f concat -safe 0 -i concat-v3.txt -c copy clip-v3-raw.mp4
+ffmpeg -i clip-v3-raw.mp4 -map 0:v -map 0:a -c copy -write_tmcd 0 clip-v3.mp4
 ```
 
 Frames were checked close-up after rendering (explosion, plane, Jason's back,
@@ -98,9 +124,9 @@ explosion beat is only ~1.4 s of footage, which is why it is stretched 0.5×.
 
 ## Upload (for the channel owner)
 
-Upload `clip-v2.mp4` as a **public** Short from the YouTube channel, any time from
+Upload `clip-v3.mp4` as a **public** Short from the YouTube channel, any time from
 20 Nov 08:00 WIB until the deadline, Mon 23 Nov 08:00 WIB. Keep it public until
-the results are out. (v1 `clip.mp4` was never uploaded — upload v2 only.)
+the results are out. (v1 `clip.mp4` and v2 `clip-v2.mp4` were never uploaded — upload v3 only.)
 
 - **Title:** Lucia blows up the cops 💀
 - **Description:**
