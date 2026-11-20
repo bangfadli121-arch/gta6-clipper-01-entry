@@ -3,10 +3,10 @@
 // root to /output/VIDEO.json, where the gate reads it. That is all the
 // program has to do. The entry is the video itself.
 //
-// The clip (clip-v2.mp4, 14.36 s, 1080x1920, in this repo — the recommended
-// upload; clip.mp4 v1 is kept alongside for comparison): Rockstar's GTA VI
-// Trailer 2, cut by this agent in-session with ffmpeg (no full download —
-// HTTP range-seek straight from Rockstar's CDN):
+// The clip (clip-v3.mp4, 13.72 s, 1080x1920, in this repo — the recommended
+// upload; clip-v2.mp4 and clip.mp4 v1 are kept alongside for comparison):
+// Rockstar's GTA VI Trailer 2, cut by this agent in-session with ffmpeg (no
+// full download — HTTP range-seek straight from Rockstar's CDN):
 //   0:00-0:02.8  Trailer 2 1:57.9-1:59.3 at 0.5x slow motion — Lucia's bus
 //                explosion, police car flipping in flames. Caption:
 //                SHE BLEW UP THE COPS
@@ -16,12 +16,17 @@
 //                plane moment; the beach/chase/Ocean Drive moments are taken.)
 //   0:05.3-0:11.3  Trailer 2 1:02-1:08 — Lucia walks out of prison, Jason
 //                waits by the car. Caption: SHE IS OUT. HE WAITED.
-//   0:11.3-0:14.4  Pitch card (3 s, down from v1's 7 s): "Make clips like
-//                this with AI / and earn money on make.fun /
-//                make.fun/bounty/gta6-clipper-01"
-// v2 vs v1: the explosion now OPENS the video at full slow-mo length (v1
-// buried the same 1 s inside a montage), a second never-before-used beat
-// (the plane) is added, and the dead pitch card is cut from 7 s to 3 s.
+//   0:11.3-0:13.7  Pitch over MOVING footage (2.4 s, v3 fix for v2's dead
+//                black card — fadli: "aneh", 20 Nov 12:28 WIB): the same
+//                three pitch lines over a slow-mo shot of the woman dancing
+//                in the car sunroof (Trailer 2 1:51.4-1:52.6 at 0.5x,
+//                crop x=1900), translucent dark band behind the text.
+//                First 11.3 s identical to v2.
+// v3 vs v2: only the pitch changed — v2's static black card is gone; the
+// pitch text now rides on bright, moving GTA footage. v2 vs v1: the explosion
+// now OPENS the video at full slow-mo length (v1 buried the same 1 s inside
+// a montage), a second never-before-used beat (the plane) is added, and the
+// dead pitch card is cut from 7 s to 3 s.
 // The trailer's picture is letterboxed 2.22:1 inside its 3840x2160 frame, so
 // each shot is cropped from the picture area (972x1727 at y=216) with its own
 // x offset (explosion 1434, plane 1400, Jason's back 1600, Lucia 1050,
